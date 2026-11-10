@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Music-video MVP CLI (analyze-audio | analyze-images | plan | expand | validate | render)."""
+"""Music-video MVP CLI (analyze-* | plan | expand | validate | render | run)."""
 
 from __future__ import annotations
 
@@ -32,6 +32,7 @@ from music_video.paths import (  # noqa: E402
     section_plan_path,
     validated_plan_path,
 )
+from music_video.pipeline import PipelineError, RunConfig, run_pipeline  # noqa: E402
 from music_video.planner_openrouter import plan_sections, write_section_plan  # noqa: E402
 from music_video.render_ffmpeg import render_job  # noqa: E402
 from music_video.timeline_expand import expand_job_files  # noqa: E402
@@ -176,6 +177,37 @@ def cmd_render(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_run(args: argparse.Namespace) -> int:
+    """Mode A: --song + --images (+ style/aspect/job). Mode B: --job only (resume)."""
+    song = Path(args.song) if args.song else None
+    images = Path(args.images) if args.images else None
+    if song is None and images is None:
+        # Mode B resume
+        if not args.job:
+            print("run requires --job (resume) or --song/--images/--job (full)", file=sys.stderr)
+            return 2
+    else:
+        # Mode A — require both song and images
+        if song is None or images is None or not args.job:
+            print("full run requires --song, --images, and --job", file=sys.stderr)
+            return 2
+    cfg = RunConfig(
+        job_id=args.job,
+        style=args.style or "cinematic music video",
+        aspect=args.aspect,
+        out=args.out,
+        song=song,
+        images_dir=images,
+    )
+    try:
+        result = run_pipeline(cfg)
+    except PipelineError as exc:
+        print(f"RUN ERROR: {exc}", file=sys.stderr)
+        return 1
+    print(json.dumps(result))
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -207,6 +239,15 @@ def main() -> int:
     r = sub.add_parser("render")
     r.add_argument("--job", required=True)
     r.set_defaults(func=cmd_render)
+
+    run = sub.add_parser("run", help="M6 full pipeline or resume-from-job")
+    run.add_argument("--job", required=True)
+    run.add_argument("--song", default=None)
+    run.add_argument("--images", default=None)
+    run.add_argument("--style", default="cinematic music video")
+    run.add_argument("--aspect", default="9:16", choices=["9:16", "16:9"])
+    run.add_argument("--out", default="final", choices=["final", "preview"])
+    run.set_defaults(func=cmd_run)
 
     args = ap.parse_args()
     return int(args.func(args))

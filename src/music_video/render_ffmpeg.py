@@ -196,6 +196,9 @@ def render_job(
     plan_validated: Path | None = None,
     images_dir: Path | None = None,
     audio_path: Path | None = None,
+    out_name: str = "final.mp4",
+    width: int | None = None,
+    height: int | None = None,
 ) -> Path:
     if not ffmpeg_available() or not ffprobe_available():
         raise RenderError("ffmpeg/ffprobe not available on PATH")
@@ -219,7 +222,12 @@ def render_job(
         raise RenderError("audio file not found for render")
     audio_path = Path(audio_path)
 
-    w, h = int(plan["width"]), int(plan["height"])
+    w = int(width) if width else int(plan["width"])
+    h = int(height) if height else int(plan["height"])
+    # ASS playres follows render target when overridden (preview)
+    plan_for_ass = dict(plan)
+    plan_for_ass["width"] = w
+    plan_for_ass["height"] = h
     duration_s = float(plan["duration_s"])
     work = job_dir / "work"
     clips_dir = work / "clips"
@@ -263,7 +271,7 @@ def render_job(
         titled = silent_video
         if plan.get("titles"):
             ass_path = work / "titles.ass"
-            build_titles_ass(plan, ass_path)
+            build_titles_ass(plan_for_ass, ass_path)
             burned = work / "video_titled.mp4"
             ass_esc = ass_path.resolve().as_posix().replace(":", "\\:")
             cmd_ass = [
@@ -280,7 +288,7 @@ def render_job(
                 raise RenderError(f"ASS burn failed:\n{(proc.stderr or '')[-1200:]}")
             titled = burned
 
-        final = job_dir / "final.mp4"
+        final = job_dir / out_name
         # mux audio; never truncate soundtrack — pad video with last frame if needed via -shortest false
         # Use audio as duration authority: -t audio_duration on output
         cmd_mux = [

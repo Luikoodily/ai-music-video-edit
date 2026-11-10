@@ -32,9 +32,11 @@ def test_render_ffmpeg_has_no_planner_or_image_imports():
         "planner_openrouter",
         "image_analyze",
         "timeline_expand",
+        "pipeline",
         "music_video.planner_openrouter",
         "music_video.image_analyze",
         "music_video.timeline_expand",
+        "music_video.pipeline",
         "open_clip",
         "torch",
     }
