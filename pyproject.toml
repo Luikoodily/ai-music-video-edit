@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "music-video"
+version = "0.1.0"
+description = "Edit Lab music-video MVP (Slice 1: M0/M1/M3/M5)"
+requires-python = ">=3.11"
+dependencies = [
+  "librosa>=0.10",
+  "soundfile>=0.12",
+  "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
+addopts = "-rs"

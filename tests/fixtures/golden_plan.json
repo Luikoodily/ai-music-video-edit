@@ -1,0 +1,82 @@
+{
+  "schema": "mv.plan.v1",
+  "aspect": "9:16",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration_s": 12.0,
+  "audio_path": "song.wav",
+  "clips": [
+    {
+      "id": "c001",
+      "image_id": "img_01",
+      "start_s": 0.0,
+      "end_s": 2.0,
+      "transition_in": "cut",
+      "fx": "none",
+      "fx_strength": 0.0,
+      "fit": "cover"
+    },
+    {
+      "id": "c002",
+      "image_id": "img_02",
+      "start_s": 2.0,
+      "end_s": 4.0,
+      "transition_in": "cut",
+      "fx": "none",
+      "fx_strength": 0.0,
+      "fit": "cover"
+    },
+    {
+      "id": "c003",
+      "image_id": "img_03",
+      "start_s": 4.0,
+      "end_s": 6.0,
+      "transition_in": "cut",
+      "fx": "none",
+      "fx_strength": 0.0,
+      "fit": "cover"
+    },
+    {
+      "id": "c004",
+      "image_id": "img_01",
+      "start_s": 6.0,
+      "end_s": 8.0,
+      "transition_in": "cut",
+      "fx": "none",
+      "fx_strength": 0.0,
+      "fit": "cover"
+    },
+    {
+      "id": "c005",
+      "image_id": "img_02",
+      "start_s": 8.0,
+      "end_s": 10.0,
+      "transition_in": "cut",
+      "fx": "none",
+      "fx_strength": 0.0,
+      "fit": "cover"
+    },
+    {
+      "id": "c006",
+      "image_id": "img_03",
+      "start_s": 10.0,
+      "end_s": 12.0,
+      "transition_in": "cut",
+      "fx": "none",
+      "fx_strength": 0.0,
+      "fit": "cover"
+    }
+  ],
+  "titles": [
+    {
+      "id": "t001",
+      "text": "PROVE",
+      "start_s": 1.0,
+      "end_s": 3.0,
+      "position": "center",
+      "style": { "color": "#FFFFFF", "bg": "#000000", "bg_pad": 12 }
+    }
+  ],
+  "notes": ["golden hand-written plan for Slice 1"]
+}

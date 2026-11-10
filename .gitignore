@@ -1,0 +1,12 @@
+jobs/*
+!jobs/.gitkeep
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+*.mp4
+*.wav
+*.mp3
+*.m4a
+!tests/fixtures/**
+.DS_Store
