@@ -10,3 +10,4 @@ __pycache__/
 *.m4a
 !tests/fixtures/**
 .DS_Store
+models/

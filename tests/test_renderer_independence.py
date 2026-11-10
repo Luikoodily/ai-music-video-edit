@@ -12,7 +12,14 @@ def test_render_ffmpeg_has_no_planner_or_image_imports():
     if not RENDER_SRC.is_file():
         raise RuntimeError(f"missing render_ffmpeg.py: {RENDER_SRC}")
     tree = ast.parse(RENDER_SRC.read_text(encoding="utf-8"))
-    banned = {"planner_openrouter", "image_analyze", "music_video.planner_openrouter", "music_video.image_analyze"}
+    banned = {
+        "planner_openrouter",
+        "image_analyze",
+        "music_video.planner_openrouter",
+        "music_video.image_analyze",
+        "open_clip",
+        "torch",
+    }
     found: set[str] = set()
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):

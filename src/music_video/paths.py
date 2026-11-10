@@ -31,6 +31,10 @@ def audio_analysis_path(job: Path) -> Path:
     return job / "audio_analysis.json"
 
 
+def image_analysis_path(job: Path) -> Path:
+    return job / "image_analysis.json"
+
+
 def plan_path(job: Path) -> Path:
     return job / "plan.json"
 

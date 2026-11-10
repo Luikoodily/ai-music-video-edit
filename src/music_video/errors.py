@@ -21,3 +21,7 @@ class AudioAnalysisError(MusicVideoError):
 
 class RenderError(MusicVideoError):
     """FFmpeg or post-render verification failure."""
+
+
+class ImageAnalysisError(MusicVideoError):
+    """Image metadata / CLIP analysis failure."""

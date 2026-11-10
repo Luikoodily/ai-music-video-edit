@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Music-video MVP CLI (Slice 1: analyze-audio | validate | render | prepare-prove)."""
+"""Music-video MVP CLI (analyze-audio | analyze-images | validate | render)."""
 
 from __future__ import annotations
 
@@ -13,11 +13,17 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from music_video.audio_analyze import write_audio_analysis  # noqa: E402
-from music_video.errors import AudioAnalysisError, HardValidationError, RenderError  # noqa: E402
+from music_video.errors import (  # noqa: E402
+    AudioAnalysisError,
+    HardValidationError,
+    ImageAnalysisError,
+    RenderError,
+)
+from music_video.image_analyze import write_image_analysis  # noqa: E402
 from music_video.paths import (  # noqa: E402
     audio_analysis_path,
     ensure_job,
-    final_mp4_path,
+    image_analysis_path,
     plan_path,
     validated_plan_path,
 )
@@ -45,6 +51,30 @@ def cmd_analyze_audio(args: argparse.Namespace) -> int:
         print(f"AUDIO ERROR: {exc}", file=sys.stderr)
         return 1
     print(json.dumps({"ok": True, "duration_s": data["duration_s"], "tempo_bpm": data["tempo_bpm"], "n_beats": len(data["beats_s"])}))
+    return 0
+
+
+def cmd_analyze_images(args: argparse.Namespace) -> int:
+    job = ensure_job(args.job)
+    images = job / "images"
+    try:
+        data = write_image_analysis(
+            images,
+            image_analysis_path(job),
+            audio_analysis_path=audio_analysis_path(job),
+            style_words=args.style,
+        )
+    except ImageAnalysisError as exc:
+        print(f"IMAGE ERROR: {exc}", file=sys.stderr)
+        return 1
+    print(json.dumps({
+        "ok": True,
+        "n_images": len(data["images"]),
+        "n_duplicates": len(data["duplicates"]),
+        "model_id": data["model_id"],
+        "embedding_dim": data["embedding_dim"],
+        "out": str(image_analysis_path(job)),
+    }))
     return 0
 
 
@@ -95,6 +125,11 @@ def main() -> int:
     a.add_argument("--job", required=True)
     a.add_argument("--song", default=None)
     a.set_defaults(func=cmd_analyze_audio)
+
+    ai = sub.add_parser("analyze-images")
+    ai.add_argument("--job", required=True)
+    ai.add_argument("--style", default=None, help="optional style words for section prompts")
+    ai.set_defaults(func=cmd_analyze_images)
 
     v = sub.add_parser("validate")
     v.add_argument("--job", required=True)
