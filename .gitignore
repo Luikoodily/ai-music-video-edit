@@ -4,10 +4,12 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+venv/
 *.mp4
 *.wav
 *.mp3
 *.m4a
+*.safetensors
 !tests/fixtures/**
 .DS_Store
 models/

@@ -88,3 +88,7 @@ python -m pytest -rs
 ```
 
 Live e2e: `MV_E2E=1` + `OPENROUTER_API_KEY`.
+
+## Models / licenses
+
+OpenCLIP `ViT-B-32` / `openai` weights are downloaded by `scripts/bootstrap_clip.py` into local `models/` (gitignored). Those weights have their own upstream license terms — review before public redistribution. This repo does not vend weight files.
