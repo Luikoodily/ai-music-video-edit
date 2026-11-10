@@ -35,6 +35,14 @@ def image_analysis_path(job: Path) -> Path:
     return job / "image_analysis.json"
 
 
+def section_plan_path(job: Path) -> Path:
+    return job / "section_plan.json"
+
+
+def planner_attempts_path(job: Path) -> Path:
+    return job / "planner_attempts.json"
+
+
 def plan_path(job: Path) -> Path:
     return job / "plan.json"
 

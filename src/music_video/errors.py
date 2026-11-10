@@ -25,3 +25,11 @@ class RenderError(MusicVideoError):
 
 class ImageAnalysisError(MusicVideoError):
     """Image metadata / CLIP analysis failure."""
+
+
+class PlannerError(MusicVideoError):
+    """OpenRouter creative-director / section-plan failure."""
+
+
+class TimelineExpandError(MusicVideoError):
+    """Deterministic timeline expansion failure."""

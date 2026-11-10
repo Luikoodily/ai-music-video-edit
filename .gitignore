@@ -11,3 +11,5 @@ __pycache__/
 !tests/fixtures/**
 .DS_Store
 models/
+.env
+*.env.local
